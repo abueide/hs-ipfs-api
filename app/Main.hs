@@ -1,32 +1,28 @@
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE TypeOperators #-}
 module Main where
-
-import Data.String.Utils (replace)
-import Data.Proxy
-import Data.Text
-import Data.Time (UTCTime)
-import GHC.Generics
-import Network.HTTP.Client (newManager, defaultManagerSettings)
+import IPFS
+import IPFS.Pubsub
 import Servant.API
 import Servant.Client
+import Network.HTTP.Client (newManager, defaultManagerSettings)
 
-
-
--- endpoint = "http://localhost:5001/api/v0/"
-type IPFS = "api" :> "v0" :> "pubsub" :> "pub" :> QueryParams "arg" String :>  Get '[PlainText] Text
-
-pub :: String -> String -> ClientM Text
-pub topic message = client (Proxy :: Proxy IPFS) [topic, (Data.String.Utils.replace " " "%20" message) ++ "%0A" ]
-
-queries :: ClientM (Text)
-queries = do
-    response <- pub  "chat" "this is a test message"
-    return (response)
+printResultStream :: Show a => ResultStream a -> IO ()
+printResultStream (ResultStream k) = k $ \getResult ->
+       let loop = do
+            r <- getResult
+            case r of
+                Nothing -> return ()
+                Just x -> print x >> loop
+       in loop
 
 main :: IO ()
 main = do
-  manager' <- newManager defaultManagerSettings
-  res <- runClientM queries (mkClientEnv manager' (BaseUrl Http "localhost" 5001 ""))
-  print $ Data.String.Utils.replace " " "%20" "this is a test message" ++ "%0A"
+      pubtest <- runQuery (pub ["chat", pubformat "this is a test"])
+      case pubtest of
+        Left err -> putStrLn $ show err
+        Right _ -> putStrLn "pubtest completed successfully"
+      subtest <- runQuery (sub ["chat"])
+      case subtest of
+        Left err -> putStrLn $ show err
+        Right stream -> do
+          putStrLn "subtest connected successfully"
+          printResultStream stream

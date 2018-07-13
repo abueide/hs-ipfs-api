@@ -1,10 +1,10 @@
 name:                hs-ipfs-api
 version:             0.1.0.0
-github:              "githubuser/hs-ipfs-api"
+github:              "abueide/hs-ipfs-api"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2018 Author name here"
+author:              "Andrew Bueide"
+maintainer:          "abueide@protonmail.com"
+copyright:           "2018 Andrew Bueide"
 
 extra-source-files:
 - README.md
@@ -20,13 +20,17 @@ extra-source-files:
 description:         Please see the README on GitHub at <https://github.com/githubuser/hs-ipfs-api#readme>
 
 dependencies:
-- base >= 4.7 && < 5
+- base
 - servant
 - servant-client
 - text
 - http-client
 - time
 - MissingH
+- aeson
+- bytestring
+- base64-bytestring
+- hspec
 
 library:
   source-dirs: src
