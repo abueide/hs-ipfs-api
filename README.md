@@ -4,7 +4,7 @@ haskell-ipfs-api uses the Servant library to create a type safe http api that ca
 
 ### Example
 
-See Main.hs
+See app/Main.hs
 ```
 main :: IO ()
 main = do
@@ -33,7 +33,7 @@ printResultStream (ResultStream k) = k $ \getResult ->
 
 ```
 
-###Implementation Progress
+### Implementation Progress
 hs-ipfs-api currently has few functions implemented. I will implement them as I need them for my project, but if one that you need is missing open an issue and I will try to implement the most popular ones first. Please contribute if you can!
 
 
