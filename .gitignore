@@ -3,3 +3,4 @@ hs-ipfs-api.cabal
 *~
 out/
 .idea/
+*.iml
